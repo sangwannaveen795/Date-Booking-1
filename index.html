@@ -244,9 +244,7 @@
                 font-size: 16px; 
                 padding: 14px;
                 width: 100%;
-                appearance: none;
-                -webkit-appearance: none;
-                -moz-appearance: none;
+                -webkit-appearance: none; 
             }
 
             .food-grid {
@@ -364,11 +362,27 @@
         const btnNo = document.getElementById('btn-no');
 
         function dodgeButton() {
-            const x = Math.random() * (window.innerWidth - btnNo.offsetWidth - 40) - (window.innerWidth/2) + 100;
-            const y = Math.random() * (window.innerHeight - btnNo.offsetHeight - 40) - (window.innerHeight/2) + 100;
-            
-            btnNo.style.position = 'absolute';
-            btnNo.style.transform = `translate(${x}px, ${y}px)`;
+            // Pull the button out of the white card and attach it to the whole page
+            if (btnNo.parentNode !== document.body) {
+                document.body.appendChild(btnNo);
+            }
+
+            // Now it will actually fly around the whole screen
+            btnNo.style.position = 'fixed';
+            btnNo.style.zIndex = '9999'; // Keep it on top of everything
+
+            // Calculate safe boundaries so it doesn't go off screen
+            const safeWidth = window.innerWidth - btnNo.offsetWidth - 20;
+            const safeHeight = window.innerHeight - btnNo.offsetHeight - 20;
+
+            // Generate random coordinates
+            const x = Math.max(10, Math.random() * safeWidth);
+            const y = Math.max(10, Math.random() * safeHeight);
+
+            // Apply new coordinates
+            btnNo.style.left = `${x}px`;
+            btnNo.style.top = `${y}px`;
+            btnNo.style.transform = 'none'; // Clear any old animations
         }
 
         btnNo.addEventListener('mouseover', dodgeButton);
